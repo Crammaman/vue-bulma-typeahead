@@ -4,8 +4,8 @@
     <input v-model="query" class="input vbta-input" type="text" @keyup.delete="handleDelete($event)" @keydown.down.prevent="handleKeyDown($event)" @keydown.up.prevent="handleKeyUp" @keyup.enter.prevent.submit="emitSelect(matches[preselected])">
     <div :class="['vbta-menu', { visible: matches.length && !selected }]">
       <ul>
-        <li v-for="match in matches" class="vbta-suggestion" @click="emitSelect(match)">
-          <span v-html="match"></span>
+        <li v-for="match in matches" class="vbta-suggestion" @click="emitSelect(match.name, match.index)">
+          <span v-html="match.name"></span>
         </li>
       </ul>
     </div>
@@ -82,7 +82,7 @@ export default {
         this.preselected--
         let el = document.getElementsByClassName("vbta-suggestion")[this.preselected]
         el.style['background-color'] = '#00d1b2'
-        
+
         let prev = document.getElementsByClassName("vbta-suggestion")[this.preselected + 1]
         prev.style['background-color'] = '#ffffff'
       }
@@ -96,25 +96,25 @@ export default {
         }
         let el = document.getElementsByClassName("vbta-suggestion")[this.preselected]
         el.style['background-color'] = '#00d1b2'
-        
+
         if (this.preselected != 0) {
           let prev = document.getElementsByClassName("vbta-suggestion")[this.preselected - 1]
           prev.style['background-color'] = '#ffffff'
         }
       }
     },
-    emitSelect (value) {
+    emitSelect (value, index) {
       value = value.replace(/<[\/]?strong>/gm, '')
       this.selected = true
       this.query = value
-      this.onSelect(value, this.name)
+      this.onSelect(value, this.name, index)
     },
     getMatches (query) {
       if (query) {
         let matches = []
         let regex = new RegExp(query, 'i')
         let isMatch = false
-        this.source.forEach(value => {
+        this.source.forEach((value, index) => {
           if (typeof value !== 'string') new TypeError(`Typeahead sources must be string. Received ${typeof value}.`)
           if (matches.length === this.limit) return
 
@@ -128,10 +128,10 @@ export default {
 
             let match = substr1 + substr2 + substr3
 
-            matches.push(match)
+            matches.push({ name: match, index: index })
 
             if (regexProps.index == 0) {
-              let hint = matches[0].replace(/<[\/]?strong>/gm, '').substring(query.length)
+              let hint = matches[0].name.replace(/<[\/]?strong>/gm, '').substring(query.length)
               if (hint !== this.hint) this.hint = query + hint
             }
           }

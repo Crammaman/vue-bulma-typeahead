@@ -57,8 +57,8 @@ export default {
     }
   },
   methods: {
-    onSelect (value) {
-      console.log(`'${value}' was selected.`)
+    onSelect (value,name,index) {
+      console.log(`'${value}', '${index}',  was selected.`)
       this.value = value
     },
     onChange (value) {
