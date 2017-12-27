@@ -61,7 +61,7 @@ export default {
       console.log(`'${value}', '${index}',  was selected.`)
       this.value = value
     },
-    onChange (value) {
+    onChange (value,name,idex) {
       console.log(`Value changed to ${value}.`)
       this.value = value
     }
