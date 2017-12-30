@@ -1,6 +1,6 @@
 <template>
   <span class="vbta">
-    <input :class="['input', 'vbta-hint', { visible: matches.length }]" type="text" :value="hint" :placeholder="placeholder" readonly>
+    <input :class="['input', 'vbta-hint', { visible: matches.length }]" type="text" :value="hint" :placeholder="placeholder" tabindex="-1" readonly >
     <input v-model="query" class="input vbta-input" type="text" @keyup.delete="handleDelete($event)" @keydown.down.prevent="handleKeyDown($event)" @keydown.up.prevent="handleKeyUp" @keyup.enter.prevent.submit="emitSelect(matches[preselected].name, preselected)">
     <div :class="['vbta-menu', { visible: matches.length && !selected }]">
       <ul>
