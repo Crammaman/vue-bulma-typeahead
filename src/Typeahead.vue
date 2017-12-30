@@ -4,7 +4,7 @@
     <input v-model="query" class="input vbta-input" type="text" @keyup.delete="handleDelete($event)" @keydown.down.prevent="handleKeyDown($event)" @keydown.up.prevent="handleKeyUp" @keyup.enter.prevent.submit="emitSelect(matches[preselected].name, preselected)">
     <div :class="['vbta-menu', { visible: matches.length && !selected }]">
       <ul>
-        <li v-for="match in matches" class="vbta-suggestion" @click="emitSelect(match.name, match.index)">
+        <li v-for="match in matches" class="vbta-suggestion" :class="{selected: match.isSelected}" @click="emitSelect(match.name, match.index)">
           <span v-html="match.name"></span>
         </li>
       </ul>
@@ -80,11 +80,9 @@ export default {
     handleKeyUp () {
       if (this.matches && this.preselected != 0) {
         this.preselected--
-        let el = document.getElementsByClassName("vbta-suggestion")[this.preselected]
-        el.style['background-color'] = '#00d1b2'
+        this.matches[this.preselected].isSelected = true
 
-        let prev = document.getElementsByClassName("vbta-suggestion")[this.preselected + 1]
-        prev.style['background-color'] = '#ffffff'
+        this.matches[this.preselected + 1].isSelected = false
       }
     },
     handleKeyDown () {
@@ -94,12 +92,10 @@ export default {
         } else {
           this.firstTouch = false
         }
-        let el = document.getElementsByClassName("vbta-suggestion")[this.preselected]
-        el.style['background-color'] = '#00d1b2'
+        this.matches[this.preselected].isSelected = true
 
         if (this.preselected != 0) {
-          let prev = document.getElementsByClassName("vbta-suggestion")[this.preselected - 1]
-          prev.style['background-color'] = '#ffffff'
+          this.matches[this.preselected - 1].isSelected = false
         }
       }
     },
@@ -128,7 +124,7 @@ export default {
 
             let match = substr1 + substr2 + substr3
 
-            matches.push({ name: match, index: index })
+            matches.push({ name: match, index: index, isSelected: false })
 
             if (regexProps.index == 0) {
               let hint = matches[0].name.replace(/<[\/]?strong>/gm, '').substring(query.length)
@@ -218,5 +214,9 @@ export default {
   box-shadow: none;
   opacity: 1;
   background: none 0% 0% / auto repeat scroll padding-box border-box rgb(255, 255, 255);
+}
+
+.selected {
+  background-color: #00d1b2;
 }
 </style>
