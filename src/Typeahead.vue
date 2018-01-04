@@ -69,6 +69,10 @@ export default {
         this.getMatches(value)
       }
       this.onChange(value, this.name)
+    },
+
+    source: function(value) {
+      this.getMatches(this.query)
     }
   },
   methods: {
@@ -129,6 +133,8 @@ export default {
             if (regexProps.index == 0) {
               let hint = matches[0].name.replace(/<[\/]?strong>/gm, '').substring(query.length)
               if (hint !== this.hint) this.hint = query + hint
+            } else {
+              this.hint = ''
             }
           }
           if (!isMatch) {
