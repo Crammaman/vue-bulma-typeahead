@@ -17,7 +17,7 @@
           <label class="label">U.S. State</label>
           <p class="control has-icons-left">
             <!-- Start Typeahead Component -->
-            <typeahead :source="source1" :onSelect="onSelect1" :onChange="onChange1" :limit="5"></typeahead>
+            <typeahead :source="source1" :onSelect="onSelect1" :onChange="onChange1" :limit="5" v-model="actualValue"></typeahead>
             <!-- End Typeahead Component -->
             <span class="icon is-small is-left">
               <i class="fa fa-magic"></i>
@@ -39,7 +39,7 @@
 
       <div class="columns">
         <div class="column is-4">
-          You are searching for '{{ value1 }}'
+          <button class="button" v-on:click="changeValue">ClickIt</button>
         </div>
           <div class="column is-4">
             You are searching for '{{ value2 }}'
@@ -77,7 +77,8 @@ export default {
         'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia',
         'Wisconsin', 'Wyoming'],
       value1: '',
-    value2: ''
+    value2: '',
+    actualValue: 'thing'
     }
   },
   methods: {
@@ -96,6 +97,9 @@ export default {
     onChange2 (value,name,index) {
       console.log(`Value changed to ${value}.`)
       this.value = value
+    },
+    changeValue (){
+      this.actualValue = 'another thing'
     }
   }
 }

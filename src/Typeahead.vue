@@ -1,7 +1,7 @@
 <template>
   <span class="vbta">
     <input :class="['input', 'vbta-hint', { visible: matches.length }]" type="text" :value="hint" :placeholder="placeholder" tabindex="-1" readonly >
-    <input v-model="query" class="input vbta-input" type="text" @keyup.delete="handleDelete($event)" @keydown.down.prevent="handleKeyDown($event)" @keydown.up.prevent="handleKeyUp" @keyup.enter.prevent.submit="emitSelect(matches[preselected].name, preselected)">
+    <input v-model="query" class="input vbta-input" type="text" @keyup.delete="handleDelete($event)" @keydown.down.prevent="handleKeyDown($event)" @keydown.up.prevent="handleKeyUp" @keyup.enter.prevent.submit="emitSelect(matches[preselected].name, matches[preselected].index)">
     <div :class="['vbta-menu', { visible: matches.length && !selected }]">
       <ul>
         <li v-for="match in matches" class="vbta-suggestion" :class="{selected: match.isSelected}" @click="emitSelect(match.name, match.index)">
@@ -49,6 +49,11 @@ export default {
       type: String,
       default() { return '' },
       required: false
+    },
+    value: {
+      type: String,
+      default() { return '' },
+      required: false
     }
   },
   data () {
@@ -69,6 +74,10 @@ export default {
         this.getMatches(value)
       }
       this.onChange(value, this.name)
+    },
+
+    value: function (newValue){
+      this.query = newValue
     },
 
     source: function(value) {
